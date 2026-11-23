@@ -6,6 +6,24 @@
 
 给 Claude Desktop、Claude Code（包括接 DeepSeek 等后端）、Codex 等 agent 用的「应用快照」工具，功能对标 Codex 的 App Snapshot。
 
+## 和 Codex「应用快照」一样的功能
+
+AnySnap 复刻了 Codex 桌面版的**应用快照**功能，并让其他 AI agent 也能用上：
+
+<p align="center"><img src="docs/images/codex-app-snapshot.png" width="520" alt="Codex 桌面版中的应用快照设置"></p>
+<p align="center"><sub>Codex 桌面版中的「应用快照」设置（截图，用于对比）</sub></p>
+
+| | Codex 应用快照 | AnySnap |
+|---|---|---|
+| 快捷键截取最前面的窗口 | ⌘ + ⌘ | 左⌘ + 右⌘（可改） |
+| 截图 + 窗口文字，包括滚动到屏幕外的文本 | ✅ | ✅ |
+| 选择快照发送到哪里 | ✅ | ✅ Claude 桌面版 / 剪贴板 / 仅保存 |
+| 截取时播放音效 | ✅ | ✅ |
+| Mini 小窗 | ✅ | — |
+| 可用的 AI | Codex / ChatGPT | Claude Desktop、Claude Code（含 DeepSeek 等后端）、Codex，以及任何支持 MCP 或命令行的 agent |
+
+> AnySnap 是独立项目，与 OpenAI 无关，也未获其认可。Codex 和 ChatGPT 是 OpenAI 的商标。
+
 ## 功能
 
 - 按 **左⌘ + 右⌘**（可改）截取最前面的窗口，截图时可播放音效

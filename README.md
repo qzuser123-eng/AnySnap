@@ -6,6 +6,24 @@
 
 **A Codex-style "app snapshot" for any AI agent on macOS.** Press left ⌘ + right ⌘ to capture the frontmost window: AnySnap saves a screenshot *plus* the window's full text from the accessibility tree — including content scrolled off-screen — and useful context the picture can't show (file paths, a terminal's working directory, the other browser tabs …). Agents read it through an MCP server or a CLI, so it works with Claude Desktop, Claude Code (with any model backend, e.g. DeepSeek), Codex and others.
 
+## Same feature as Codex "App Snapshot"
+
+AnySnap reproduces the **App Snapshot** feature of the Codex app and makes it available to other AI agents:
+
+<p align="center"><img src="docs/images/codex-app-snapshot.png" width="520" alt="App Snapshot settings in the Codex app"></p>
+<p align="center"><sub>The App Snapshot settings in the Codex app (screenshot, for comparison)</sub></p>
+
+| | Codex App Snapshot | AnySnap |
+|---|---|---|
+| Hotkey to capture the frontmost window | ⌘ + ⌘ | Left ⌘ + right ⌘ (configurable) |
+| Screenshot + window text, including text scrolled off-screen | ✅ | ✅ |
+| Choose where snapshots are sent | ✅ | ✅ Claude Desktop / clipboard / save only |
+| Shutter sound | ✅ | ✅ |
+| "Mini" window | ✅ | — |
+| Works with | Codex / ChatGPT | Claude Desktop, Claude Code (any backend, e.g. DeepSeek), Codex, and any agent that supports MCP or a CLI |
+
+> AnySnap is an independent project and is not affiliated with or endorsed by OpenAI. Codex and ChatGPT are trademarks of OpenAI.
+
 ## Features
 
 - Press **left ⌘ + right ⌘** (configurable) to capture the frontmost window, with an optional shutter sound
