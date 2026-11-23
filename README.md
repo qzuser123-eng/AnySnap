@@ -42,6 +42,14 @@ AnySnap reproduces the **App Snapshot** feature of the Codex app and makes it av
 
 - Where snapshots go: send to Claude Desktop (only the screenshot appears in the chat box; the AI fetches the full text through MCP automatically) / copy to clipboard / save only
 
+## Screenshots
+
+<p align="center"><img src="docs/images/menu-destination.png" width="760" alt="AnySnap menu: snapshot destination"></p>
+<p align="center"><sub>Menu bar menu — choose where snapshots go</sub></p>
+
+<p align="center"><img src="docs/images/menu-recent.png" width="760" alt="AnySnap menu: recent snapshots and retention"></p>
+<p align="center"><sub>Recent snapshots, retention period (3 days by default) and "delete all"</sub></p>
+
 ## How it works
 
 ```
@@ -151,6 +159,10 @@ See [AGENTS.md](AGENTS.md) for the code layout.
 - Text quality depends on each app's accessibility support. Native apps, Safari, Chrome and Electron apps work well; apps that draw their own UI (some games, Java apps) may expose no text, in which case AnySnap falls back to OCR.
 - From macOS 27.3, ordinary apps can't simply be added to the Accessibility list; full-text capture needs that permission, otherwise only OCR of the visible area is available.
 - "Send to Claude Desktop" activates Claude and simulates ⌘V, so Claude's input box needs to have focus.
+
+## Feedback
+
+Feedback is very welcome! Report a bug or suggest a feature in [Issues](https://github.com/qzuser123-eng/AnySnap/issues/new/choose), or ask questions and share ideas in [Discussions](https://github.com/qzuser123-eng/AnySnap/discussions).
 
 ## License
 

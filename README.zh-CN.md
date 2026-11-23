@@ -42,6 +42,14 @@ AnySnap 复刻了 Codex 桌面版的**应用快照**功能，并让其他 AI age
 
 - 快照目标位置：发送到 Claude 桌面版（输入框里只出现截图，完整文字由 AI 通过 MCP 自动读取）/ 复制到剪贴板 / 仅保存
 
+## 界面
+
+<p align="center"><img src="docs/images/menu-destination.png" width="760" alt="AnySnap 菜单：快照目标位置"></p>
+<p align="center"><sub>菜单栏菜单：选择快照发送到哪里</sub></p>
+
+<p align="center"><img src="docs/images/menu-recent.png" width="760" alt="AnySnap 菜单：最近快照与保留时间"></p>
+<p align="center"><sub>最近快照、快照保留时间（默认 3 天）和一键清空</sub></p>
+
 ## 工作方式
 
 ```
@@ -151,6 +159,10 @@ python3 scripts/make-icon.py              # 重新生成图标
 - 文字读取效果取决于应用对无障碍接口的支持。原生应用、Safari、Chrome、Electron 应用都不错；少数自绘界面的应用（部分游戏、Java 程序）可能读不到文字，这时退回 OCR。
 - macOS 27.3 起普通应用无法直接加入「无障碍」列表，读取全文需要先完成授权；否则只有 OCR（仅屏幕上可见的文字）。
 - 「发送到 Claude」是先激活 Claude 窗口再模拟 ⌘V，要求 Claude 的输入框处于焦点。
+
+## 反馈
+
+非常欢迎提意见！遇到问题或想要新功能，请到 [Issues](https://github.com/qzuser123-eng/AnySnap/issues/new/choose) 提交；想交流用法、聊想法，欢迎来 [讨论区](https://github.com/qzuser123-eng/AnySnap/discussions)。
 
 ## License
 

@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Questions & ideas / 提问与讨论
+    url: https://github.com/qzuser123-eng/AnySnap/discussions
+    about: Not sure it's a bug? Ask in Discussions. / 不确定是不是 bug？欢迎到讨论区聊。

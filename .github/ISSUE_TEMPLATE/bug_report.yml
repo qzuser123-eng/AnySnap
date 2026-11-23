@@ -1,0 +1,49 @@
+name: 🐞 Bug report / 问题反馈
+description: Something doesn't work as expected / 有功能不正常
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! 感谢反馈！请尽量填写下面的信息，方便定位问题。
+        ⚠️ Please remove private content (paths, window text) before posting. / 发帖前请删掉快照里的隐私内容。
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened? / 发生了什么？
+      description: What you did, what you expected, and what happened instead. / 你做了什么、期望什么、实际发生了什么。
+    validations:
+      required: true
+  - type: input
+    id: app
+    attributes:
+      label: App being captured / 截取的是哪个应用
+      placeholder: e.g. Google Chrome, Finder, Word / 例如 Chrome、访达、Word
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Agent / 使用的 AI
+      multiple: true
+      options:
+        - Claude Desktop
+        - Claude Code
+        - Codex
+        - Other (MCP) / 其他 MCP 客户端
+        - CLI only / 只用命令行
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version / 系统版本
+      placeholder: e.g. macOS 27.3
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `anysnap doctor` / `anysnap doctor` 的输出
+      render: text
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else? / 其他补充
+      description: Screenshots, logs, crash reports (Console → Crash Reports → AnySnap). / 截图、日志、崩溃报告（控制台 → 崩溃报告 → AnySnap）。
