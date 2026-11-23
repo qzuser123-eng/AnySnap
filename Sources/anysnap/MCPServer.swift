@@ -120,6 +120,7 @@ final class MCPServer {
     private func callTool(_ id: Any, _ params: [String: Any]) {
         let name = params["name"] as? String ?? ""
         let args = params["arguments"] as? [String: Any] ?? [:]
+        #if os(macOS)
         let withShot = args["include_screenshot"] as? Bool ?? true
         let maxChars = (args["max_chars"] as? NSNumber)?.intValue ?? defaultMaxChars
 
@@ -174,6 +175,17 @@ final class MCPServer {
         default:
             fail(id, -32602, "Unknown tool: \(name)")
         }
+        #else
+        // Non-macOS builds exist only so the server can start and list its tools
+        // (e.g. for directory introspection). Capturing needs macOS.
+        _ = args
+        switch name {
+        case "get_latest_snapshot", "capture_window", "list_snapshots", "get_snapshot":
+            toolText(id, "AnySnap only works on macOS: install the AnySnap app on a Mac (https://github.com/qzuser123-eng/AnySnap).", isError: true)
+        default:
+            fail(id, -32602, "Unknown tool: \(name)")
+        }
+        #endif
     }
 
     private func toolText(_ id: Any, _ text: String, isError: Bool) {
@@ -181,6 +193,7 @@ final class MCPServer {
         reply(id, ["content": content, "isError": isError])
     }
 
+#if os(macOS)
     private func toolSnapshot(_ id: Any, _ m: SnapshotMeta, withShot: Bool, maxChars: Int) {
         let age = Int(Date().timeIntervalSince(m.createdAt))
         let ageText = age < 120 ? "\(age) seconds" : (age < 7200 ? "\(age / 60) minutes" : "\(age / 3600) hours")
@@ -195,4 +208,5 @@ final class MCPServer {
         }
         reply(id, ["content": content, "isError": false])
     }
+    #endif
 }

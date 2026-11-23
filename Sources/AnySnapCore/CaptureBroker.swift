@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 
 /// Lets the CLI / MCP server ask the running AnySnap.app to take the capture.
@@ -111,3 +112,4 @@ public enum CaptureBroker {
         }
     }
 }
+#endif

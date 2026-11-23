@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import CoreGraphics
 import ScreenCaptureKit
@@ -92,3 +93,4 @@ public enum WindowCapture {
         return rep.representation(using: .jpeg, properties: [.compressionFactor: quality])
     }
 }
+#endif

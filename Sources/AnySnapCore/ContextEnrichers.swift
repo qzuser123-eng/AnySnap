@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import UniformTypeIdentifiers
 
@@ -246,3 +247,4 @@ public enum ContextEnrichers {
         return parts.isEmpty ? nil : parts.joined(separator: " · ")
     }
 }
+#endif

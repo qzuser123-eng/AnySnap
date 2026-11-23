@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 
 /// Asks Finder (via Apple Events) for the front window's folder and the selected items.
@@ -39,3 +40,4 @@ public enum FinderInfo {
         return result
     }
 }
+#endif

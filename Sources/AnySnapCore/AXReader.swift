@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import ApplicationServices
 
@@ -323,3 +324,4 @@ public enum AXReader {
         return snap
     }
 }
+#endif

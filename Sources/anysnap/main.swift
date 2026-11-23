@@ -1,6 +1,7 @@
 import Foundation
 import AnySnapCore
 
+#if os(macOS)
 let usage = """
 anysnap \(AnySnapVersion) — app snapshots for AI agents
 
@@ -101,3 +102,12 @@ case "doctor":
 default:
     print(usage)
 }
+#else
+// Linux/other builds: only the MCP server (tools report that AnySnap needs macOS).
+switch CommandLine.arguments.dropFirst().first ?? "help" {
+case "mcp":
+    MCPServer().run()
+default:
+    print("anysnap \(AnySnapVersion) — AnySnap captures Mac windows and only works on macOS.\nUSAGE: anysnap mcp   (MCP server over stdio)")
+}
+#endif

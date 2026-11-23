@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import CoreGraphics
 
@@ -78,3 +79,4 @@ public enum Delivery {
         up?.post(tap: .cghidEventTap)
     }
 }
+#endif

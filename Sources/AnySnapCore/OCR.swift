@@ -1,3 +1,4 @@
+#if os(macOS)
 import CoreGraphics
 import Vision
 
@@ -43,3 +44,4 @@ public enum OCR {
             .joined(separator: "\n")
     }
 }
+#endif

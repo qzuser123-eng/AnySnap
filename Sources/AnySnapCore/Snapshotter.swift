@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Darwin
 
@@ -274,3 +275,4 @@ public enum Snapshotter {
         return nil
     }
 }
+#endif

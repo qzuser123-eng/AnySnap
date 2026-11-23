@@ -1,6 +1,6 @@
+#if os(macOS)
 import Foundation
 
-public let AnySnapVersion = "0.1.0"
 
 /// Metadata written next to every snapshot as meta.json.
 public struct SnapshotMeta: Codable {
@@ -185,3 +185,4 @@ public enum SnapshotStore {
         (try? String(contentsOfFile: meta.contextPath, encoding: .utf8)) ?? ""
     }
 }
+#endif
