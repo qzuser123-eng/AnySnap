@@ -2,137 +2,137 @@
 
 # AnySnap
 
-**A Codex-style "app snapshot" for any AI agent on macOS.** Press left ⌘ + right ⌘ to capture the frontmost window: AnySnap saves a screenshot *plus* the window's full text from the accessibility tree — including content scrolled off-screen — and useful context the picture can't show (file paths, a terminal's working directory, the other browser tabs …). Agents read it through an MCP server or a CLI, so it works with Claude Desktop, Claude Code (any model backend, e.g. DeepSeek), Codex and others.
+<p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a></p>
 
-给 Claude Desktop、Claude Code（包括接 DeepSeek 等后端）、Codex 等 agent 用的「应用快照」工具，功能对标 Codex 的 App Snapshot。
+**A Codex-style "app snapshot" for any AI agent on macOS.** Press left ⌘ + right ⌘ to capture the frontmost window: AnySnap saves a screenshot *plus* the window's full text from the accessibility tree — including content scrolled off-screen — and useful context the picture can't show (file paths, a terminal's working directory, the other browser tabs …). Agents read it through an MCP server or a CLI, so it works with Claude Desktop, Claude Code (with any model backend, e.g. DeepSeek), Codex and others.
 
-## 功能
+## Features
 
-- 按 **左⌘ + 右⌘**（可改）截取最前面的窗口，截图时可播放音效
-- 截图之外，读取窗口的**全部文字，包括滚动到屏幕外的内容**；没有无障碍权限时自动退回 OCR
-- 截图看不到、但对 AI 有用的信息也一并记录：
+- Press **left ⌘ + right ⌘** (configurable) to capture the frontmost window, with an optional shutter sound
+- Besides the screenshot, reads the window's **full text, including content scrolled off-screen**; falls back to OCR when Accessibility permission is not available
+- Records context a screenshot can't show:
 
-| 场景 | 额外记录的内容 |
+| Where | Extra context |
 |---|---|
-| 访达 | 当前文件夹路径、选中文件的完整路径 + 大小 / 修改时间 / 类型 |
-| 打开文件的应用（预览、Word、文本编辑…） | 文件的完整路径 |
-| 浏览器（Chrome / Edge / Brave / Arc / Safari） | 网址，以及同一窗口里其他标签页的标题和网址 |
-| 终端（Terminal / iTerm2） | 当前工作目录、正在运行的程序 |
-| PDF 阅读器 | 当前页码 |
-| Excel / PowerPoint | 当前工作表 / 当前第几张幻灯片 |
-| 代码编辑器 | 光标所在行 |
+| Finder | Folder path, full paths of the selected files + size / modified date / type |
+| Apps with an open file (Preview, Word, TextEdit …) | Full path of the file |
+| Browsers (Chrome / Edge / Brave / Arc / Safari) | URL, plus titles and URLs of the other tabs in the window |
+| Terminal / iTerm2 | Working directory and the running program |
+| PDF readers | Current page |
+| Excel / PowerPoint | Active sheet / current slide |
+| Code editors | Cursor line |
 
-- 快照目标位置：发送到 Claude 桌面版（输入框里只出现截图，完整文字由 AI 通过 MCP 自动读取）/ 复制到剪贴板 / 仅保存
+- Where snapshots go: send to Claude Desktop (only the screenshot appears in the chat box; the AI fetches the full text through MCP automatically) / copy to clipboard / save only
 
-## 工作方式
+## How it works
 
 ```
-┌────────────── AnySnap.app（菜单栏）──────────────┐
-│ 全局快捷键 → 截取前台窗口 → 保存快照 → 按目标位置分发 │
-└──────────────────────────────────────────────────┘
+┌────────────── AnySnap.app (menu bar) ──────────────┐
+│ hotkey → capture frontmost window → save → deliver │
+└────────────────────────────────────────────────────┘
           │ ~/Library/Application Support/AnySnap/snapshots/<id>/
           │   screenshot.png / context.md / meta.json
           ▼
-   anysnap（CLI，同时也是 MCP 服务器）
+   anysnap (CLI, also an MCP server)
    ├─ Claude Desktop ── MCP
-   ├─ Claude Code（Anthropic / DeepSeek 等后端）── MCP 或 `anysnap latest --context`
-   └─ Codex / 其他 harness ── MCP 或直接调用 CLI
+   ├─ Claude Code (Anthropic / DeepSeek / … backends) ── MCP or `anysnap latest --context`
+   └─ Codex / other harnesses ── MCP or the CLI
 ```
 
-## 安装（从源码编译）
+## Install (build from source)
 
-需要 macOS 14 以上，以及 Xcode 或 Command Line Tools（`xcode-select --install`）。目前没有提供编译好的安装包。
+Requires macOS 14+ and Xcode or the Command Line Tools (`xcode-select --install`). No prebuilt binaries yet.
 
 ```bash
-git clone <this repo> AnySnap && cd AnySnap
+git clone https://github.com/qzuser123-eng/AnySnap.git && cd AnySnap
 chmod +x scripts/*.sh
-./scripts/make-dev-cert.sh   # 可选，只需一次：用固定证书签名，重新编译后不用重新授权
-./scripts/install.sh         # 编译、安装到 ~/Applications 并启动
+./scripts/make-dev-cert.sh   # optional, once: sign with a stable certificate so rebuilds keep permissions
+./scripts/install.sh         # build, install to ~/Applications and launch
 ```
 
-第一次启动后，到 **系统设置 → 隐私与安全性** 给 AnySnap 打开：
-- **辅助功能**（macOS 27 起叫「**无障碍**」）：全局快捷键、读取窗口文字
-- **屏幕录制**：窗口截图
+After the first launch, allow AnySnap in **System Settings → Privacy & Security**:
+- **Accessibility**: global hotkey and reading window text
+- **Screen Recording**: window screenshots
 
-授权后从菜单栏退出 AnySnap 再打开。读取访达、终端、浏览器、Office 信息时，macOS 会分别询问一次"是否允许 AnySnap 控制 XX"。菜单栏的「权限状态…」可以查看授权情况。
+Then quit and reopen AnySnap from the menu bar. When it first reads Finder, Terminal, a browser or Office, macOS asks once whether AnySnap may control that app. The menu bar item **Permission status…** shows what is granted.
 
-## 接入 agent
+## Connect your agents
 
-**Claude Desktop**：编辑 `~/Library/Application Support/Claude/claude_desktop_config.json`，然后 ⌘Q 重启 Claude。也可以运行 `ANYSNAP_ADD_CLAUDE_MCP=1 ./scripts/install.sh` 自动添加（修改前会备份）：
+**Claude Desktop**: edit `~/Library/Application Support/Claude/claude_desktop_config.json`, then quit (⌘Q) and reopen Claude. Or run `ANYSNAP_ADD_CLAUDE_MCP=1 ./scripts/install.sh` to add it automatically (a backup is made first):
 
 ```json
 {
   "mcpServers": {
     "anysnap": {
-      "command": "/Users/<你的用户名>/Applications/AnySnap.app/Contents/Helpers/anysnap",
+      "command": "/Users/<you>/Applications/AnySnap.app/Contents/Helpers/anysnap",
       "args": ["mcp"]
     }
   }
 }
 ```
 
-**Claude Code**（Anthropic 或 DeepSeek 等后端都适用）：
+**Claude Code** (Anthropic, DeepSeek or other backends):
 
 ```bash
 claude mcp add -s user anysnap -- ~/Applications/AnySnap.app/Contents/Helpers/anysnap mcp
 ```
 
-**Codex CLI**：`codex mcp add anysnap -- ~/Applications/AnySnap.app/Contents/Helpers/anysnap mcp`
+**Codex CLI**: `codex mcp add anysnap -- ~/Applications/AnySnap.app/Contents/Helpers/anysnap mcp`
 
-**不支持 MCP 的 harness**：在它的系统提示或 AGENTS.md 里加一句：
-> 当用户说"看这个窗口 / 我刚截的图"时，运行 `anysnap latest --context` 读取快照；需要看图时读取输出里的 screenshot 路径。
+**Harnesses without MCP**: add to their system prompt or AGENTS.md:
+> When the user says "look at this window" or "what I just captured", run `anysnap latest --context` to read the snapshot; read the screenshot path in its output if you need the image.
 
-### MCP 工具
+### MCP tools
 
-| 工具 | 作用 |
+| Tool | What it does |
 |---|---|
-| `get_latest_snapshot` | 读取最近一次快照（用户发来截图时，AI 会自动调用它拿完整文字） |
-| `capture_window` | 立即截取前台窗口（自动跳过 AI 客户端自己的窗口），可用 `app` 参数指定应用 |
-| `list_snapshots` / `get_snapshot` | 浏览历史快照 |
+| `get_latest_snapshot` | Latest snapshot (the AI calls it automatically when you send a screenshot, to get the full text) |
+| `capture_window` | Capture the frontmost window now (the AI client's own window is skipped); `app` targets a specific app |
+| `list_snapshots` / `get_snapshot` | Browse earlier snapshots |
 
-不支持看图的模型（如 DeepSeek）调用时传 `include_screenshot: false`，只用文字部分。MCP / CLI 截图会交给正在运行的 AnySnap.app 代劳，所以用的是 AnySnap 自己的权限。
+Text-only models (e.g. DeepSeek) should pass `include_screenshot: false`. Captures requested through MCP / CLI are performed by the running AnySnap.app, so they use AnySnap's own permissions.
 
 ## CLI
 
 ```bash
-anysnap capture            # 从终端运行时会跳过终端本身，截取它后面的窗口
+anysnap capture            # from a terminal, skips the terminal itself and captures the window behind it
 anysnap capture --app Safari --context
 anysnap latest --json
 anysnap list
-anysnap doctor             # 检查权限
+anysnap doctor             # check permissions
 ```
 
-## 菜单栏选项
+## Menu bar options
 
-| 选项 | 说明 |
+| Option | Description |
 |---|---|
-| 快捷键 | 同时按左右 ⌘（默认）、同时按左右 ⌥、双击 ⌘，或录制任意组合键 |
-| 快照目标位置 | 发送到 Claude 桌面版 / 复制到剪贴板 / 仅保存 |
-| 剪贴板格式 | 自动：发给 Claude 时只贴截图，终端里贴路径引用，其他应用贴截图和 context.md |
-| 最近快照 | 重新复制某次快照、快照保留时间、清空所有快照 |
-| 包含截图 / 播放音效 / 登录时启动 | 开关 |
+| Hotkey | Left + right ⌘ (default), left + right ⌥, double-tap ⌘, or record any shortcut |
+| Snapshot destination | Send to Claude Desktop / copy to clipboard / save only |
+| Clipboard format | Auto: screenshot only for Claude, a path reference for terminals, screenshot + context.md for other apps |
+| Recent snapshots | Copy an earlier snapshot again, retention period, delete all snapshots |
+| Include screenshot / Play sound / Launch at login | Toggles |
 
-## 隐私
+## Privacy
 
-- 快照（截图和窗口文字）只保存在本机，**默认 3 天后自动删除**（可改为 1 / 7 / 30 天或永久），最多保留 100 个，也可一键清空
-- 1Password、Bitwarden、KeePassXC、钥匙串访问、「密码」App 等密码管理器**不会被截取**
-- **注意**：接入 MCP 后，AI 可以通过 `capture_window` 主动截取你当前的窗口，不需要你按快捷键。如果不希望这样，只在需要时才把 AnySnap 加进 agent 的 MCP 配置
-- 不联网、不上传，快照只会通过你配置的 agent 发出去
+- Snapshots (screenshots and window text) stay on your Mac and are **deleted after 3 days by default** (1 / 7 / 30 days or forever are available); at most 100 are kept, and you can delete all of them at once
+- Password managers (1Password, Bitwarden, KeePassXC, Keychain Access, Passwords …) are **never captured**
+- **Note**: once connected through MCP, an AI can call `capture_window` to capture your current window without you pressing the hotkey. If you don't want that, only add AnySnap to an agent's MCP config when you need it
+- No network access, no uploads: snapshots leave your Mac only through the agents you configure
 
-## 开发
+## Development
 
 ```bash
-AUTO_INSTALL=1 ./scripts/watch-build.sh   # 源码一变就自动编译、安装并重启 AnySnap
-python3 scripts/make-icon.py              # 重新生成图标
+AUTO_INSTALL=1 ./scripts/watch-build.sh   # rebuild, reinstall and relaunch on every source change
+python3 scripts/make-icon.py              # regenerate the app icon
 ```
 
-代码结构见 [AGENTS.md](AGENTS.md)。
+See [AGENTS.md](AGENTS.md) for the code layout.
 
-## 已知限制
+## Known limitations
 
-- 文字读取效果取决于应用对无障碍接口的支持。原生应用、Safari、Chrome、Electron 应用都不错；少数自绘界面的应用（部分游戏、Java 程序）可能读不到文字，这时退回 OCR。
-- macOS 27.3 起普通应用无法直接加入「无障碍」列表，读取全文需要先完成授权；否则只有 OCR（仅屏幕上可见的文字）。
-- 「发送到 Claude」是先激活 Claude 窗口再模拟 ⌘V，要求 Claude 的输入框处于焦点。
+- Text quality depends on each app's accessibility support. Native apps, Safari, Chrome and Electron apps work well; apps that draw their own UI (some games, Java apps) may expose no text, in which case AnySnap falls back to OCR.
+- From macOS 27.3, ordinary apps can't simply be added to the Accessibility list; full-text capture needs that permission, otherwise only OCR of the visible area is available.
+- "Send to Claude Desktop" activates Claude and simulates ⌘V, so Claude's input box needs to have focus.
 
 ## License
 
