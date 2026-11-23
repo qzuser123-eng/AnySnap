@@ -4,10 +4,13 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 CONFIG="${CONFIG:-release}"
-echo "▶ swift build -c $CONFIG"
-swift build -c "$CONFIG" --product AnySnapBar
-swift build -c "$CONFIG" --product anysnap
-BIN="$(swift build -c "$CONFIG" --show-bin-path)"
+# e.g. ANYSNAP_ARCHS="arm64 x86_64" for a universal build (needs Xcode)
+ARCH_FLAGS=()
+for a in ${ANYSNAP_ARCHS:-}; do ARCH_FLAGS+=(--arch "$a"); done
+echo "▶ swift build -c $CONFIG ${ARCH_FLAGS[*]:-}"
+swift build -c "$CONFIG" ${ARCH_FLAGS[@]+"${ARCH_FLAGS[@]}"} --product AnySnapBar
+swift build -c "$CONFIG" ${ARCH_FLAGS[@]+"${ARCH_FLAGS[@]}"} --product anysnap
+BIN="$(swift build -c "$CONFIG" ${ARCH_FLAGS[@]+"${ARCH_FLAGS[@]}"} --show-bin-path)"
 
 APP="build/AnySnap.app"
 rm -rf "$APP" build/AppSnap.app   # build/AppSnap.app: leftover from the old name
