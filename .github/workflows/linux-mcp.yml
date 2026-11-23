@@ -25,3 +25,38 @@ jobs:
           echo "$out" | grep -q '"serverInfo"'
           echo "$out" | grep -q '"get_latest_snapshot"'
           echo "$out" | grep -q 'only works on macOS'
+
+  # Prebuilt Linux binaries of the MCP server (used by MCP directories such as Glama
+  # to run their introspection checks). Published to the "linux-mcp" pre-release.
+  binary:
+    if: github.event_name != 'pull_request'
+    needs: docker
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            arch: x86_64
+          - runner: ubuntu-24.04-arm
+            arch: aarch64
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          docker run --rm -v "$PWD":/src -w /src swift:6.1-jammy \
+            bash -c 'swift build -c release --product anysnap --static-swift-stdlib && cp "$(swift build -c release --show-bin-path)/anysnap" anysnap-linux-${{ matrix.arch }}'
+      - name: Check it runs on Debian trixie
+        run: |
+          printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' \
+            | docker run -i --rm -v "$PWD":/w debian:trixie-slim /w/anysnap-linux-${{ matrix.arch }} mcp \
+            | grep -q get_latest_snapshot
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view linux-mcp >/dev/null 2>&1 || gh release create linux-mcp --prerelease --target "$GITHUB_SHA" \
+            --title "Linux MCP server (for MCP directories)" \
+            --notes "Linux build of the anysnap MCP server, only for MCP directory checks: AnySnap itself needs macOS. Rebuilt on every push to main."
+          gh release upload linux-mcp anysnap-linux-${{ matrix.arch }} --clobber
