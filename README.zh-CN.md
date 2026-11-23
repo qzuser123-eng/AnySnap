@@ -65,9 +65,21 @@ AnySnap 复刻了 Codex 桌面版的**应用快照**功能，并让其他 AI age
    └─ Codex / 其他 harness ── MCP 或直接调用 CLI
 ```
 
-## 安装（从源码编译）
+## 安装
 
-需要 macOS 14 以上，以及 Xcode 或 Command Line Tools（`xcode-select --install`）。目前没有提供编译好的安装包。
+### 直接下载（最简单）
+
+需要 macOS 14 以上（Apple 芯片和 Intel 都支持）。
+
+1. 从 [最新版本](https://github.com/qzuser123-eng/AnySnap/releases/latest) 下载 `AnySnap-<版本>-macOS.zip` 并解压。
+2. 把 **AnySnap.app** 放进**你个人目录下的**「应用程序」文件夹（`~/Applications`，没有就新建一个），这样下文的路径可以直接用。
+3. 打开它。这个 app 没有经过苹果公证，第一次打开会被 macOS 拦下：到 **系统设置 → 隐私与安全性**，往下翻，点「**仍要打开**」（或者在终端运行一次 `xattr -dr com.apple.quarantine ~/Applications/AnySnap.app`）。
+
+下载版是临时签名（ad-hoc），所以装新版本后 macOS 可能会让你重新授权下面的权限。
+
+### 从源码编译
+
+需要 macOS 14 以上，以及 Xcode 或 Command Line Tools（`xcode-select --install`）。
 
 ```bash
 git clone https://github.com/qzuser123-eng/AnySnap.git && cd AnySnap

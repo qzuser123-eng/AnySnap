@@ -65,9 +65,21 @@ AnySnap reproduces the **App Snapshot** feature of the Codex app and makes it av
    └─ Codex / other harnesses ── MCP or the CLI
 ```
 
-## Install (build from source)
+## Install
 
-Requires macOS 14+ and Xcode or the Command Line Tools (`xcode-select --install`). No prebuilt binaries yet.
+### Download (easiest)
+
+Requires macOS 14+ (Apple silicon or Intel).
+
+1. Download `AnySnap-<version>-macOS.zip` from the [latest release](https://github.com/qzuser123-eng/AnySnap/releases/latest) and unzip it.
+2. Move **AnySnap.app** into the `Applications` folder **inside your home folder** (`~/Applications`; create it if needed), so the paths below work as written.
+3. Open it. The app is not notarized by Apple, so macOS blocks the first launch: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway** (or run `xattr -dr com.apple.quarantine ~/Applications/AnySnap.app` once).
+
+The download is ad-hoc signed, so after installing a newer version macOS may ask for the permissions below again.
+
+### Build from source
+
+Requires macOS 14+ and Xcode or the Command Line Tools (`xcode-select --install`).
 
 ```bash
 git clone https://github.com/qzuser123-eng/AnySnap.git && cd AnySnap
