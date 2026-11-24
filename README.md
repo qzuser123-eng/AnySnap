@@ -75,7 +75,7 @@ Requires macOS 14+ (Apple silicon or Intel).
 2. Move **AnySnap.app** into the `Applications` folder **inside your home folder** (`~/Applications`; create it if needed), so the paths below work as written.
 3. Open it. The app is not notarized by Apple, so macOS blocks the first launch: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway** (or run `xattr -dr com.apple.quarantine ~/Applications/AnySnap.app` once).
 
-The download is ad-hoc signed, so after installing a newer version macOS may ask for the permissions below again.
+Every release is signed with the same (self-signed) "AnySnap Release" certificate, so macOS keeps the permissions below when you update.
 
 ### Build from source
 

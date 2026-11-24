@@ -75,7 +75,7 @@ AnySnap 复刻了 Codex 桌面版的**应用快照**功能，并让其他 AI age
 2. 把 **AnySnap.app** 放进**你个人目录下的**「应用程序」文件夹（`~/Applications`，没有就新建一个），这样下文的路径可以直接用。
 3. 打开它。这个 app 没有经过苹果公证，第一次打开会被 macOS 拦下：到 **系统设置 → 隐私与安全性**，往下翻，点「**仍要打开**」（或者在终端运行一次 `xattr -dr com.apple.quarantine ~/Applications/AnySnap.app`）。
 
-下载版是临时签名（ad-hoc），所以装新版本后 macOS 可能会让你重新授权下面的权限。
+每个版本都用同一个（自签名的）"AnySnap Release" 证书签名，所以升级后 macOS 会保留下面的权限，不用重新授权。
 
 ### 从源码编译
 
