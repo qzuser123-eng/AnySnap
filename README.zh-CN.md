@@ -4,7 +4,7 @@
 
 <p align="center"><a href="README.md">English</a> · <b>简体中文</b></p>
 
-给 Claude Desktop、Claude Code（包括接 DeepSeek 等后端）、Codex 等 agent 用的「应用快照」工具，功能对标 Codex 的 App Snapshot。
+给 Claude Desktop、Claude Code（包括接 DeepSeek 等后端）、Codex 等 agent 用的「应用快照」工具，功能对标 Codex 的 App Snapshot。支持 macOS，也有 [Windows 版](#windows-版预览)。
 
 ## 和 Codex「应用快照」一样的功能
 
@@ -93,6 +93,22 @@ chmod +x scripts/*.sh
 - **屏幕录制**：窗口截图
 
 授权后从菜单栏退出 AnySnap 再打开。读取访达、终端、浏览器、Office 信息时，macOS 会分别询问一次"是否允许 AnySnap 控制 XX"。菜单栏的「权限状态…」可以查看授权情况。
+
+## Windows 版（预览）
+
+AnySnap 也能在 **Windows 10 / 11**（x64 和 ARM64）上运行，是一个托盘小程序，功能一样：按 **左 Ctrl + 右 Ctrl** 截取前台窗口的截图和完整文字（通过 Windows UI Automation 读取，包括滚动到屏幕外的内容），agent 通过同样的 MCP 工具读取。
+
+1. 从 [最新版本](https://github.com/qzuser123-eng/AnySnap/releases/latest) 下载 `AnySnap-<版本>-Windows-x64.zip`（ARM 电脑选 `-arm64`），把 `AnySnap.exe` 解压到一个固定的文件夹，比如 `%LOCALAPPDATA%\Programs\AnySnap`。
+2. 运行它。这个 exe 没有代码签名，SmartScreen 可能会提示：点「**更多信息 → 仍要运行**」。AnySnap 会出现在任务栏右下角的通知区域（可能收在 **^** 箭头里）。
+3. 右键托盘图标 →「**连接到 Claude 桌面版（写入 MCP 配置）…**」，然后完全退出 Claude 桌面版再重新打开。其他 agent 用「复制 MCP 配置」，或者：
+   ```powershell
+   claude mcp add -s user anysnap -- "$env:LOCALAPPDATA\Programs\AnySnap\AnySnap.exe" mcp
+   codex mcp add anysnap -- "$env:LOCALAPPDATA\Programs\AnySnap\AnySnap.exe" mcp
+   ```
+
+Windows 上不需要额外授权。托盘菜单和 macOS 菜单栏的选项一样（快照目标位置、剪贴板格式、快捷键（可自定义）、保留天数、开机启动）。快照存放在 `%LOCALAPPDATA%\AnySnap\snapshots`。
+
+能读取的内容：记事本等编辑器的完整文档；Chrome / Edge 的整个网页、网址和标签页；文件资源管理器当前文件夹和选中文件的完整路径；读不到文字的窗口用 OCR 识别。每次改动都会在 GitHub Actions 的 Windows 机器上自动测试（记事本、资源管理器、Edge、Chrome、快捷键、剪贴板、MCP）；但真实用户用得还不多，欢迎 [反馈](https://github.com/qzuser123-eng/AnySnap/issues)。Windows 上暂不支持：终端的当前目录、Office 文档详情。
 
 ## 接入 agent
 

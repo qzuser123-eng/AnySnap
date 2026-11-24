@@ -40,13 +40,15 @@ jobs:
         continue-on-error: true
         run: powershell -NoProfile -ExecutionPolicy Bypass -File windows/tests/e2e.ps1 -Exe out/win-x64/AnySnap.exe -Out test-results
 
-      - name: Publish test results (screenshots + captured text)
-        if: always() && github.event_name != 'release'
+      - name: Publish test results (screenshots + captured text) when a test failed
+        if: steps.e2e.outcome == 'failure' && github.event_name != 'release'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           Compress-Archive -Path test-results/* -DestinationPath windows-test-results.zip -Force
+          # Also kept as a workflow artifact
+          Write-Host "Publishing test results to the ci-windows-tests pre-release"
           gh release view ci-windows-tests 2>$null
           if ($LASTEXITCODE -ne 0) {
             gh release create ci-windows-tests --prerelease --title "CI: Windows test results" `
@@ -67,6 +69,13 @@ jobs:
             Compress-Archive -Path "out/win-$arch/AnySnap.exe" -DestinationPath $zip -Force
             gh release upload $env:TAG $zip --clobber
           }
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-test-results
+          path: test-results
+          retention-days: 14
 
       - name: Fail if tests failed
         if: steps.e2e.outcome == 'failure'

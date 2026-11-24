@@ -4,7 +4,7 @@
 
 <p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a></p>
 
-**A Codex-style "app snapshot" for any AI agent on macOS.** Press left ⌘ + right ⌘ to capture the frontmost window: AnySnap saves a screenshot *plus* the window's full text from the accessibility tree — including content scrolled off-screen — and useful context the picture can't show (file paths, a terminal's working directory, the other browser tabs …). Agents read it through an MCP server or a CLI, so it works with Claude Desktop, Claude Code (with any model backend, e.g. DeepSeek), Codex and others.
+**A Codex-style "app snapshot" for any AI agent on macOS (and [Windows](#windows-preview)).** Press left ⌘ + right ⌘ to capture the frontmost window: AnySnap saves a screenshot *plus* the window's full text from the accessibility tree — including content scrolled off-screen — and useful context the picture can't show (file paths, a terminal's working directory, the other browser tabs …). Agents read it through an MCP server or a CLI, so it works with Claude Desktop, Claude Code (with any model backend, e.g. DeepSeek), Codex and others.
 
 ## Same feature as Codex "App Snapshot"
 
@@ -93,6 +93,22 @@ After the first launch, allow AnySnap in **System Settings → Privacy & Securit
 - **Screen Recording**: window screenshots
 
 Then quit and reopen AnySnap from the menu bar. When it first reads Finder, Terminal, a browser or Office, macOS asks once whether AnySnap may control that app. The menu bar item **Permission status…** shows what is granted.
+
+## Windows (preview)
+
+AnySnap also runs on **Windows 10 / 11** (x64 and ARM64) as a small tray app. It does the same thing: press **left Ctrl + right Ctrl** to capture the front window's screenshot plus its full text (via Windows UI Automation, including content scrolled off-screen), and agents read it through the same MCP tools.
+
+1. Download `AnySnap-<version>-Windows-x64.zip` (or `-arm64`) from the [latest release](https://github.com/qzuser123-eng/AnySnap/releases/latest) and unzip `AnySnap.exe` to a permanent folder, e.g. `%LOCALAPPDATA%\Programs\AnySnap`.
+2. Run it. The exe is not code-signed, so SmartScreen may warn: click **More info → Run anyway**. AnySnap appears in the notification area of the taskbar (it may be under the **^** overflow arrow).
+3. Right-click the tray icon → **Connect to Claude Desktop (add MCP config)…**, then quit Claude Desktop completely and reopen it. For other agents use **Copy MCP config**, or:
+   ```powershell
+   claude mcp add -s user anysnap -- "$env:LOCALAPPDATA\Programs\AnySnap\AnySnap.exe" mcp
+   codex mcp add anysnap -- "$env:LOCALAPPDATA\Programs\AnySnap\AnySnap.exe" mcp
+   ```
+
+No extra Windows permissions are needed. The tray menu has the same options as the macOS menu (where snapshots go, clipboard format, hotkey incl. a custom one, keep-for days, start with Windows). Snapshots are stored in `%LOCALAPPDATA%\AnySnap\snapshots`.
+
+What it reads: full document text (Notepad and other editors), the whole page plus URL and tabs in Chrome / Edge, the folder and the selected files' full paths in File Explorer, and OCR for windows without accessible text. Every change is tested automatically on a Windows machine on GitHub Actions (Notepad, Explorer, Edge, Chrome, the hotkey, the clipboard, MCP); it hasn't been used much by real users yet, so [feedback](https://github.com/qzuser123-eng/AnySnap/issues) is very welcome. Not on Windows yet: a terminal's working directory and Office document details.
 
 ## Connect your agents
 

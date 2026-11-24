@@ -11,6 +11,9 @@ AnySnap is a Swift Package (macOS 14+, Swift 5 language mode, no dependencies).
   - `Delivery.swift` — clipboard formats, activate + ⌘V paste
 - `Sources/AnySnapBar` — menu bar app (hotkeys, settings in UserDefaults, menu)
 - `Sources/anysnap` — CLI and stdio MCP server (hand-written JSON-RPC, newline-delimited)
+- `windows/AnySnap` — Windows version (C# .NET 8, WinForms tray app + `AnySnap.exe mcp`), UI Automation text,
+  PrintWindow screenshots, OCR fallback. Built and tested only on GitHub Actions (`.github/workflows/windows.yml`,
+  `windows/tests/e2e.ps1`: Notepad, Explorer, Edge, Chrome, hotkey, clipboard, MCP).
 - `scripts/build-app.sh` — builds `build/AnySnap.app`; `scripts/install.sh` installs to ~/Applications
 
 ## Build / test loop
