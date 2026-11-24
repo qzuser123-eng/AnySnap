@@ -70,6 +70,8 @@ public static class Snapshotter
             {
                 var (folder, selected) = ExplorerInfo.Read(target.Hwnd, target.Title);
                 meta.FolderPath = folder;
+                if (selected.Count == 0 && folder != null)
+                    selected = ExplorerInfo.ResolveNames(folder, UiaReader.SelectedItemNames(target.Hwnd));
                 if (selected.Count > 0) meta.SelectedPaths = selected;
             }
 

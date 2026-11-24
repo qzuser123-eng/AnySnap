@@ -5,6 +5,22 @@ namespace AnySnap;
 /// File Explorer: the folder shown in the window and the selected items (full paths).
 public static class ExplorerInfo
 {
+    /// Maps item names shown in the list (extensions may be hidden) to full paths in the folder.
+    public static List<string> ResolveNames(string folder, List<string> names)
+    {
+        var result = new List<string>();
+        if (names.Count == 0) return result;
+        string[] entries;
+        try { entries = Directory.GetFileSystemEntries(folder); } catch { return result; }
+        foreach (var name in names)
+        {
+            var exact = entries.FirstOrDefault(e => Path.GetFileName(e).Equals(name, StringComparison.OrdinalIgnoreCase));
+            var match = exact ?? entries.FirstOrDefault(e => Path.GetFileNameWithoutExtension(e).Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (match != null && !result.Contains(match)) result.Add(match);
+        }
+        return result;
+    }
+
     public static (string? folder, List<string> selected) Read(IntPtr hwnd, string windowTitle)
     {
         string? folder = null;

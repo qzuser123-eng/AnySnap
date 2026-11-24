@@ -63,16 +63,20 @@ public static class UiaReader
             var root = uia.ElementFromHandle(target.Hwnd);
             var tree = Fetch(uia, root);
 
-            // Chromium/Electron apps build their accessibility tree only once a client asks:
-            // the first pass can be nearly empty, so ask again after a moment.
-            if (CountText(tree) < 200 && Native.ClassName(target.Hwnd).StartsWith("Chrome_WidgetWin", StringComparison.Ordinal))
+            // Chromium/Electron apps (Chrome, Edge, VS Code, ...) expose the web content only after an
+            // assistive-technology request on the page area; wake it up and fetch again until the page shows.
+            bool browser = IsBrowser(target.ProcessName);
+            if (Native.ClassName(target.Hwnd).StartsWith("Chrome_WidgetWin", StringComparison.Ordinal))
             {
-                Thread.Sleep(800);
-                tree = Fetch(uia, root);
+                for (int attempt = 0; attempt < 4 && !HasWebContent(tree, browser); attempt++)
+                {
+                    WakeChromium(target.Hwnd);
+                    Thread.Sleep(attempt == 0 ? 600 : 1000);
+                    tree = Fetch(uia, root);
+                }
             }
 
             var sb = new StringBuilder();
-            bool browser = IsBrowser(target.ProcessName);
             if (browser)
             {
                 result.Url = FindUrl(tree);
@@ -164,6 +168,59 @@ public static class UiaReader
         int c = n.Name.Length + (n.Value?.Length ?? 0);
         foreach (var k in n.Kids) c += CountText(k);
         return c;
+    }
+
+    /// Browsers: a Document with something in it. Other Chromium apps: some text at all.
+    static bool HasWebContent(Node tree, bool browser)
+    {
+        if (!browser) return CountText(tree) >= 200;
+        var docs = new List<Node>();
+        FindDocuments(tree, docs);
+        return docs.Any(d => d.Kids.Count > 0 || d.HasText);
+    }
+
+    static void WakeChromium(IntPtr hwnd)
+    {
+        var iidAccessible = new Guid("618736e0-3c3d-11cf-810c-00aa00389b71");
+        var hosts = new List<IntPtr>();
+        Native.EnumChildWindows(hwnd, (h, _) =>
+        {
+            if (Native.ClassName(h) == "Chrome_RenderWidgetHostHWND") hosts.Add(h);
+            return true;
+        }, IntPtr.Zero);
+        foreach (var h in hosts)
+        {
+            try
+            {
+                Native.AccessibleObjectFromWindow(h, 0xFFFFFFFC /* OBJID_CLIENT */, ref iidAccessible, out var acc);
+                if (acc != null && Marshal.IsComObject(acc)) Marshal.ReleaseComObject(acc);
+            }
+            catch { }
+        }
+    }
+
+    static readonly Regex TabSuffix = new(@"\s+-\s+(Memory usage|Speicherverbrauch|内存使用量|内存使用).*$", RegexOptions.Compiled);
+
+    /// Names of selected list items (Explorer selection when the Shell API has none).
+    public static List<string> SelectedItemNames(IntPtr hwnd)
+    {
+        var names = new List<string>();
+        try
+        {
+            var uia = (IUIAutomation)Activator.CreateInstance(Type.GetTypeFromCLSID(new Guid("e22ad333-b25f-460c-83d0-0581107395c9"))!)!;
+            var root = uia.ElementFromHandle(hwnd);
+            var cond = uia.CreateAndCondition(
+                uia.CreatePropertyCondition(ControlTypeP, ListItem),
+                uia.CreatePropertyCondition(30079 /* SelectionItemIsSelected */, true));
+            var found = root.FindAll((TreeScope)4, cond);
+            for (int i = 0; found != null && i < found.Length && i < 200; i++)
+            {
+                var n = Clean(found.GetElement(i).CurrentName);
+                if (n.Length > 0) names.Add(n);
+            }
+        }
+        catch { }
+        return names;
     }
 
     // ---- text ----
@@ -286,7 +343,7 @@ public static class UiaReader
     static void CollectTabs(Node n, List<string> tabs, bool insideDocument)
     {
         if (n.Type == Document) return;
-        if (n.Type == TabItem && n.Name.Length > 0) tabs.Add(n.Name);
+        if (n.Type == TabItem && n.Name.Length > 0) tabs.Add(TabSuffix.Replace(n.Name, ""));
         foreach (var k in n.Kids) CollectTabs(k, tabs, insideDocument);
     }
 

@@ -121,6 +121,19 @@ New-Item -ItemType Directory -Force -Path $folder | Out-Null
 'c' | Set-Content (Join-Path $folder 'zeta.txt')
 Start-Process explorer.exe -ArgumentList "/select,`"$(Join-Path $folder 'selected-file.txt')`""
 Start-Sleep -Seconds 6
+try {
+    $shell = New-Object -ComObject Shell.Application
+    foreach ($w in @($shell.Windows())) {
+        try {
+            if ($w.Document.Folder.Self.Path -eq $folder) {
+                $item = $w.Document.Folder.ParseName('selected-file.txt')
+                $w.Document.SelectItem($item, 1 + 4 + 8 + 16)   # select, deselect others, ensure visible, focus
+                Write-Host "selected via Shell: $($item.Path)"
+            }
+        } catch { }
+    }
+} catch { Write-Host "shell select failed: $_" }
+Start-Sleep -Seconds 1
 $t = Capture-Mcp 'explorer' 'explorer'
 Check 'explorer: folder path' ($t.Contains($folder))
 Check 'explorer: selected file path' ($t.Contains((Join-Path $folder 'selected-file.txt')))
