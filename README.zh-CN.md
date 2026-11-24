@@ -6,6 +6,8 @@
 
 给 Claude Desktop、Claude Code（包括接 DeepSeek 等后端）、Codex 等 agent 用的「应用快照」工具，功能对标 Codex 的 App Snapshot。支持 macOS，也有 [Windows 版](#windows-版预览)。
 
+<p align="center"><img src="docs/images/demo.gif" width="760" alt="AnySnap 演示：截取窗口，agent 读到了屏幕外的内容"></p>
+
 ## 和 Codex「应用快照」一样的功能
 
 AnySnap 复刻了 Codex 桌面版的**应用快照**功能，并让其他 AI agent 也能用上：

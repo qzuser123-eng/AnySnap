@@ -6,6 +6,8 @@
 
 **A Codex-style "app snapshot" for any AI agent on macOS (and [Windows](#windows-preview)).** Press left ⌘ + right ⌘ to capture the frontmost window: AnySnap saves a screenshot *plus* the window's full text from the accessibility tree — including content scrolled off-screen — and useful context the picture can't show (file paths, a terminal's working directory, the other browser tabs …). Agents read it through an MCP server or a CLI, so it works with Claude Desktop, Claude Code (with any model backend, e.g. DeepSeek), Codex and others.
 
+<p align="center"><img src="docs/images/demo.gif" width="760" alt="AnySnap demo: capture a window, the agent reads text that was never on screen"></p>
+
 ## Same feature as Codex "App Snapshot"
 
 AnySnap reproduces the **App Snapshot** feature of the Codex app and makes it available to other AI agents:
