@@ -1,0 +1,73 @@
+name: Windows
+
+on:
+  push:
+    branches: [main]
+    paths: ['windows/**', '.github/workflows/windows.yml']
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to attach the Windows build to (leave empty to only build and test)
+        required: false
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build (x64 and arm64, self-contained single file)
+        shell: pwsh
+        run: |
+          foreach ($rid in 'win-x64', 'win-arm64') {
+            dotnet publish windows/AnySnap/AnySnap.csproj -c Release -r $rid --self-contained true `
+              -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `
+              -p:EnableCompressionInSingleFile=true -p:DebugType=none -o "out/$rid"
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+          Get-ChildItem out -Recurse | Format-Table FullName, Length
+
+      - name: End-to-end tests (Notepad, Explorer, Edge, Chrome, hotkey, MCP)
+        id: e2e
+        shell: powershell
+        continue-on-error: true
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File windows/tests/e2e.ps1 -Exe out/win-x64/AnySnap.exe -Out test-results
+
+      - name: Publish test results (screenshots + captured text)
+        if: always() && github.event_name != 'release'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          Compress-Archive -Path test-results/* -DestinationPath windows-test-results.zip -Force
+          gh release view ci-windows-tests 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create ci-windows-tests --prerelease --title "CI: Windows test results" `
+              --notes "Screenshots and captured text from the latest Windows end-to-end test run. Not a release." --target $env:GITHUB_SHA
+          }
+          gh release upload ci-windows-tests windows-test-results.zip --clobber
+
+      - name: Package and attach to release
+        if: github.event_name == 'release' || inputs.tag != ''
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          if ($env:TAG -in @('linux-mcp', 'ci-windows-tests')) { exit 0 }
+          foreach ($arch in 'x64', 'arm64') {
+            $zip = "AnySnap-$($env:TAG)-Windows-$arch.zip"
+            Compress-Archive -Path "out/win-$arch/AnySnap.exe" -DestinationPath $zip -Force
+            gh release upload $env:TAG $zip --clobber
+          }
+
+      - name: Fail if tests failed
+        if: steps.e2e.outcome == 'failure'
+        run: exit 1
