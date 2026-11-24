@@ -50,6 +50,9 @@ AnySnap reproduces the **App Snapshot** feature of the Codex app and makes it av
 <p align="center"><img src="docs/images/menu-recent.png" width="760" alt="AnySnap menu: recent snapshots and retention"></p>
 <p align="center"><sub>Recent snapshots, retention period (3 days by default) and "delete all"</sub></p>
 
+<p align="center"><img src="docs/images/windows-tray-menu-en.png" width="600" alt="AnySnap on Windows: tray menu"></p>
+<p align="center"><sub>Windows: the tray menu (real screenshot from the automated Windows test run)</sub></p>
+
 ## How it works
 
 ```
@@ -97,6 +100,7 @@ Then quit and reopen AnySnap from the menu bar. When it first reads Finder, Term
 ## Windows (preview)
 
 AnySnap also runs on **Windows 10 / 11** (x64 and ARM64) as a small tray app. It does the same thing: press **left Ctrl + right Ctrl** to capture the front window's screenshot plus its full text (via Windows UI Automation, including content scrolled off-screen), and agents read it through the same MCP tools.
+
 
 1. Download `AnySnap-<version>-Windows-x64.zip` (or `-arm64`) from the [latest release](https://github.com/qzuser123-eng/AnySnap/releases/latest) and unzip `AnySnap.exe` to a permanent folder, e.g. `%LOCALAPPDATA%\Programs\AnySnap`.
 2. Run it. The exe is not code-signed, so SmartScreen may warn: click **More info → Run anyway**. AnySnap appears in the notification area of the taskbar (it may be under the **^** overflow arrow).

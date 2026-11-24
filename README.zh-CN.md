@@ -50,6 +50,9 @@ AnySnap 复刻了 Codex 桌面版的**应用快照**功能，并让其他 AI age
 <p align="center"><img src="docs/images/menu-recent.png" width="760" alt="AnySnap 菜单：最近快照与保留时间"></p>
 <p align="center"><sub>最近快照、快照保留时间（默认 3 天）和一键清空</sub></p>
 
+<p align="center"><img src="docs/images/windows-tray-menu-zh.png" width="560" alt="Windows 版 AnySnap 托盘菜单"></p>
+<p align="center"><sub>Windows 版：托盘菜单（自动化测试时在 Windows 上截的真实界面）</sub></p>
+
 ## 工作方式
 
 ```
@@ -97,6 +100,7 @@ chmod +x scripts/*.sh
 ## Windows 版（预览）
 
 AnySnap 也能在 **Windows 10 / 11**（x64 和 ARM64）上运行，是一个托盘小程序，功能一样：按 **左 Ctrl + 右 Ctrl** 截取前台窗口的截图和完整文字（通过 Windows UI Automation 读取，包括滚动到屏幕外的内容），agent 通过同样的 MCP 工具读取。
+
 
 1. 从 [最新版本](https://github.com/qzuser123-eng/AnySnap/releases/latest) 下载 `AnySnap-<版本>-Windows-x64.zip`（ARM 电脑选 `-arm64`），把 `AnySnap.exe` 解压到一个固定的文件夹，比如 `%LOCALAPPDATA%\Programs\AnySnap`。
 2. 运行它。这个 exe 没有代码签名，SmartScreen 可能会提示：点「**更多信息 → 仍要运行**」。AnySnap 会出现在任务栏右下角的通知区域（可能收在 **^** 箭头里）。
