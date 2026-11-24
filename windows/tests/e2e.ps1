@@ -201,6 +201,25 @@ try {
 } catch { Write-Host "desktop screenshot failed: $_" }
 
 Get-Process -Name 'AnySnap' -ErrorAction SilentlyContinue | Stop-Process -Force
+
+# 8. Tray menu screenshots (English and Chinese) for the README
+foreach ($lang in 'en', 'zh') {
+    $env:ANYSNAP_LANG = $lang
+    $env:ANYSNAP_DEMO_MENU = '1'
+    Start-Process -FilePath $Exe
+    Start-Sleep -Seconds 5
+    try {
+        $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+        $bmp = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
+        $g = [System.Drawing.Graphics]::FromImage($bmp)
+        $g.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+        $bmp.Save((Join-Path $Out "tray-menu-$lang.png"), [System.Drawing.Imaging.ImageFormat]::Png)
+        $g.Dispose(); $bmp.Dispose()
+    } catch { Write-Host "menu screenshot failed: $_" }
+    Get-Process -Name 'AnySnap' -ErrorAction SilentlyContinue | Stop-Process -Force
+    Start-Sleep -Seconds 1
+}
+Remove-Item Env:ANYSNAP_DEMO_MENU, Env:ANYSNAP_LANG -ErrorAction SilentlyContinue
 Get-Process -Name 'notepad' -ErrorAction SilentlyContinue | Stop-Process -Force
 
 $results | Set-Content -Encoding UTF8 (Join-Path $Out 'summary.txt')

@@ -74,6 +74,24 @@ public sealed class TrayApp : ApplicationContext
         _pruneTimer.Start();
 
         UpdateTooltip();
+
+        // For README screenshots / UI tests: open the menu (and its "After capture" submenu) on start.
+        if (Environment.GetEnvironmentVariable("ANYSNAP_DEMO_MENU") == "1")
+        {
+            var demo = new System.Windows.Forms.Timer { Interval = 1500 };
+            demo.Tick += (_, _) =>
+            {
+                demo.Stop();
+                var menu = _icon.ContextMenuStrip!;
+                BuildMenu();
+                var area = Screen.PrimaryScreen!.WorkingArea;
+                menu.Show(new Point(area.Right - 360, area.Bottom - menu.PreferredSize.Height - 10));
+                if (menu.Items[3] is ToolStripMenuItem dest) dest.ShowDropDown();
+            };
+            demo.Start();
+            return;
+        }
+
         if (!_settings.WelcomeShown)
         {
             Balloon(L.T($"AnySnap 已在这里运行。按 {_settings.HotkeyLabel} 截取前台窗口，右键图标打开菜单。",

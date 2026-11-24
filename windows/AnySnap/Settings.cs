@@ -60,6 +60,7 @@ public sealed class Settings
 /// Chinese UI when Windows is set to Chinese, English otherwise.
 public static class L
 {
-    public static readonly bool Zh = CultureInfo.CurrentUICulture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+    public static readonly bool Zh = (Environment.GetEnvironmentVariable("ANYSNAP_LANG") ?? CultureInfo.CurrentUICulture.Name)
+        .StartsWith("zh", StringComparison.OrdinalIgnoreCase);
     public static string T(string zh, string en) => Zh ? zh : en;
 }
