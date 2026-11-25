@@ -4,6 +4,14 @@
 
 <p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a></p>
 
+<p align="center">
+  <a href="https://github.com/qzuser123-eng/AnySnap/releases/latest"><img src="https://img.shields.io/github/v/release/qzuser123-eng/AnySnap?label=release" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-blue" alt="macOS | Windows">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"></a>
+  <a href="https://mcpservers.org/servers/qzuser123-eng/anysnap"><img src="https://mcpservers.org/badge.svg" alt="Listed on mcpservers.org"></a>
+  <a href="https://glama.ai/mcp/servers/qzuser123-eng/AnySnap"><img src="https://glama.ai/mcp/servers/qzuser123-eng/AnySnap/badges/score.svg" alt="AnySnap MCP server on Glama"></a>
+</p>
+
 **A Codex-style "app snapshot" for any AI agent on macOS (and [Windows](#windows-preview)).** Press left ⌘ + right ⌘ to capture the frontmost window: AnySnap saves a screenshot *plus* the window's full text from the accessibility tree — including content scrolled off-screen — and useful context the picture can't show (file paths, a terminal's working directory, the other browser tabs …). Agents read it through an MCP server or a CLI, so it works with Claude Desktop, Claude Code (with any model backend, e.g. DeepSeek), Codex and others.
 
 <p align="center"><img src="docs/images/demo.gif" width="760" alt="AnySnap demo: capture a window, the agent reads text that was never on screen"></p>

@@ -4,6 +4,14 @@
 
 <p align="center"><a href="README.md">English</a> · <b>简体中文</b></p>
 
+<p align="center">
+  <a href="https://github.com/qzuser123-eng/AnySnap/releases/latest"><img src="https://img.shields.io/github/v/release/qzuser123-eng/AnySnap?label=release" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-blue" alt="macOS | Windows">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"></a>
+  <a href="https://mcpservers.org/servers/qzuser123-eng/anysnap"><img src="https://mcpservers.org/badge.svg" alt="Listed on mcpservers.org"></a>
+  <a href="https://glama.ai/mcp/servers/qzuser123-eng/AnySnap"><img src="https://glama.ai/mcp/servers/qzuser123-eng/AnySnap/badges/score.svg" alt="AnySnap MCP server on Glama"></a>
+</p>
+
 给 Claude Desktop、Claude Code（包括接 DeepSeek 等后端）、Codex 等 agent 用的「应用快照」工具，功能对标 Codex 的 App Snapshot。支持 macOS，也有 [Windows 版](#windows-版预览)。
 
 <p align="center"><img src="docs/images/demo.gif" width="760" alt="AnySnap 演示：截取窗口，agent 读到了屏幕外的内容"></p>
